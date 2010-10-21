@@ -1,0 +1,34 @@
+Pipeline: (running example is located at directory ./example)
+
+1) convert a parse tree to a trivial parse forest
+cat short1_parse | ../tree.py --toforest >short1_pforest
+
+
+2) convert a parse forest into a translation forest:
+  You can use 2.1) + 2.2) + 2.3) + 2.4) or  2.4) directly  or 
+  You can use Yoav's pattern-matching algorithm, which has no restrictions on the height of lhs 
+
+  2.1) filter the large rule set and output the small rule set, which is only used in current parse forest. 
+  NOTE: max_height of lhs="(NP (NN c1))" is 2
+  cat short1_pforest | ../forest.py --rulefilter t2s.rules -w config.ini --max_height 3 >short1_rules
+
+  2.2) filter the count=1 rules
+  grep -v "count1=1 " short1_rules >short1_rules_count2
+  
+  2.3) filter max(lhs)<=k
+  cat short1_rules_count2 | ../ruleextraction/rulefilter.py 50  >short1_rules_count2_rhs50
+ 
+  2.4) convert a parse forest into a translation forest. NOTE -w won't be used 
+  cat short1_pforest | ../forest.py -r short1_rules_count2_rhs50 --max_height 3 -w "gt_prob=-1" 1>short1_tforest
+
+3) prune a translation forest
+cat short1_tforest | ../prune.py --lm lm.3.sri  -r10 -w config.ini >short1_tforest_p10
+
+4) decoding
+  4.1) cyk style decoding:
+  cat short1_tforest_p10 | ../cyksearch.py  -w config.ini  --lm lm.3.sri --order 3 -b 100 >result.cyk
+  4.2) incremental decoding:
+  cat short1_tforest_p10 | ../lmsearch.py  -w config.ini  --lm lm.3.sri --order 3 -b 100 --nomert >result.incremental
+
+5) bleu test
+  cat result.cyk | ../bleu.py - ref*

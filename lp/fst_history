@@ -1,0 +1,500 @@
+  421  cd MST/
+  422  ls
+  423  less Makefile 
+  424  less Make.src 
+  425  cd ..
+  426  ls
+  427  cd incl/
+  428  ls
+  429  cd ..
+  430  echo $LEDAHOME
+  431  make configure
+  432  echo LEDAROOT
+  433  echo $LEDAROOT
+  434  make configure
+  435  cd ..
+  436  rm -fr dynamic_graphs-0.8/
+  437  tar xvf LEP_dynamic_graphs-0.8.tar.gz 
+  438  cd dynamic_graphs-0.8/
+  439  make configure
+  440  make
+  441  cd ..
+  442  cd LEDA-6.2-free-FC8_686x64-g++-4.1.2
+  443  ls
+  444  cd incl/
+  445  ln -s LEDA/* .
+  446  ls
+  447  cd LEDA/
+  448  ln -s LEDA/* .
+  449  ls
+  450  ln -s graph/* .
+  451  ls
+  452  cd ..
+  453  cd dynamic_graphs-0.8/
+  454  ls
+  455  make
+  456  less INSTALL 
+  457  ls
+  458  cd ..
+  459  wget http://www.dis.uniroma1.it//pub/demetres/experim/dsplib-1.0/dsplib-1.0.tar.gz
+  460  tar xvf dsplib-1.0.tar.gz 
+  461  cd dsplib-1.0
+  462  ls
+  463  screen 
+  464  qstat -u ar_009
+  465  cd ..
+  466  ls -l tmp/weights.round.*
+  467  ls -l tmp/weights.round.* | less
+  468  ls -l tmp/weights.round.* 
+  469  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/small_prog eval
+  470  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/med_prog eval
+  471  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.prune.tforest eval
+  472  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.newfeat.lex.prune.tforest eval
+  473  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  474  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.tforest eval
+  475  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.tforest 
+  476  screen -x 86
+  477  screen  -x 
+  478  python Features/train_manager.py --hadoop_weights tmp/weights.round.66.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/med_prog eval
+  479  python Features/train_manager.py --hadoop_weights tmp/weights.round.43.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/med_prog eval
+  480  python Features/train_manager.py --hadoop_weights tmp/weights.round.43.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.tforest 
+  481  python Features/train_manager.py --hadoop_weights tmp/weights.round.43.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  482  python Features/train_manager.py --hadoop_weights tmp/weights.round.70.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  483  /home/nlg-03/riesa/tools/python26/bin/python2.6 Features/train_manager.py -w example/config.blank --lm example/lm.3.sri --order 3 --feature_map_file ~/h/transdata/processed_data/num_feature_counts_100_200000 --train ~/h/transdata/processed_data/features_oracle_100_200000 --dev ~/h/transdata/processed_data/very_small_prog --no_lm --rm_features example/minimal --dist --num_maps 200 --num_reds 18 --min_split 320000000 crf
+  484  python Features/train_manager.py --hadoop_weights tmp/weights.round.80.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  485  qsub -l "nodes=10,walltime=30:00:00" -I -q isi
+  486  python Features/train_manager.py --hadoop_weights tmp/weights.round.90.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  487  python Features/train_manager.py --hadoop_weights tmp/weights.round.83.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  488  python Features/train_manager.py --hadoop_weights tmp/weights.round.81.0.380058255921 --lm example/lm.3.sri --order 3 --no_lm --rm_features example/no_dense --dev ~/h/transdata/processed_data/dev.lex.newfeat.prune.tforest eval
+  489  screen  -x 8648
+  490  screen  -x
+  491  emacs nw
+  492  cd Libs/
+  493  ls
+  494  cd ..
+  495  cd Projects/
+  496  ls
+  497  cd pyopenfst/
+  498  ls
+  499  screen  -x 288
+  500  screen  -x 
+  501  cd ..
+  502  ls
+  503  cd 
+  504  ls
+  505  cd h
+  506  ls
+  507  cd Projects/pyopenfst/
+  508  ls
+  509  cd ..
+  510  ls
+  511  cd transforest
+  512  ls
+  513  cd lp/
+  514  ls
+  515  cd ..
+  516  cd pyopenfst/
+  517  ls
+  518  make
+  519  ls
+  520  cd ..
+  521  ls
+  522  cd transforest
+  523  ls
+  524  ls -l _openfst.so 
+  525  python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  526  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  527  kill %1
+  528  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  529  cd ../pyopenfst/
+  530  make
+  531  cd ../transforest
+  532  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  533  cd ../
+  534  ls
+  535  cd pyopenfst/
+  536  make
+  537  cd ..
+  538  cd transforest
+  539  ls
+  540  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  541  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 --non_neg
+  542  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  543  less /tmp/lm.fsa 
+  544  fstprint /tmp/lm.fsa 
+  545  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  546  fstprint /tmp/lm.fsa 
+  547  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  548  fstprint /tmp/lm.fsa 
+  549  fstprint /tmp/lm.fsa | less
+  550  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3
+  551  fstprint /tmp/lm.fsa | less
+  552  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3
+  553  fstprint /tmp/lm.fsa | less
+  554  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3
+  555  fstprint /tmp/lm.fsa | less
+  556  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3
+  557  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  558  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3
+  559  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  560  fstprint /tmp/count.fsa | less
+  561  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  562  fstprint /tmp/count.fsa | less
+  563  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3
+  564  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 | less
+  565  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  566  fstprint /tmp/tree.fsa | less
+  567  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  568  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 | less
+  569  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  570  kill %2
+  571  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  572  fstprint /tmp/tree.fsa | less
+  573  fstprint /tmp/lm.fsa | less
+  574  fstprint /tmp/count.fsa | less
+  575  fstprint /tmp/tree.fsa | less
+  576  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  577  fstprint /tmp/tree.fsa | less
+  578  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  579  fstprint /tmp/tree.fsa | less
+  580  fstprint /tmp/final.fsa | less
+  581  fstprint /tmp/lm.fsa | less
+  582  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  583  fstprint /tmp/final.fsa | less
+  584  fstprint /tmp/final.fsa | wc
+  585  fstprint /tmp/lm.fsa | wc
+  586  fstprint /tmp/tree.fsa | wc
+  587  fstprint /tmp/count.fsa | wc
+  588  fstshortestpath /tmp/final.fsa 
+  589  fstshortestdistance /tmp/final.fsa 
+  590  time fstshortestdistance /tmp/final.fsa > /tmp/t
+  591  time fstshortestdistance /tmp/final.fsa > /dev/null 
+  592* fstshortest -
+  593  fstprint /tmp/lm.fsa | wc
+  594  fstprint /tmp/final.fsa | wc
+  595  time fstshortestpath /tmp/final.fsa > /dev/null 
+  596  fstprune 
+  597  fstprune -h
+  598  man fstprune
+  599  fstprune --weight 3 /tmp/final.fsa /tmp/final.prune.fsa
+  600  fstprune --weight=3 /tmp/final.fsa /tmp/final.prune.fsa
+  601  time fstshortestpath /tmp/final.prune.fsa > /dev/null 
+  602  fstprint /tmp/final.prune.fsa | wc
+  603  fstprune --weight=1 /tmp/final.fsa /tmp/final.prune.fsa
+  604  fstprint /tmp/final.prune.fsa | wc
+  605  time fstshortestpath /tmp/final.prune.fsa > /dev/null 
+  606  cd ..
+  607  cd ocropus/
+  608  ls
+  609  cd data/
+  610  ls
+  611  cd ..
+  612  ls
+  613  cd commands/
+  614  ls
+  615  cd ..
+  616  ls
+  617  cd ocr-utils/
+  618  ls
+  619  cd ..
+  620  cd u
+  621  cd utilities/
+  622  ls
+  623  cd ..
+  624  ls
+  625  cd ocr-utils/
+  626  ls
+  627  cd ..
+  628  find . | grep langmod
+  629  cd ocr-commands/
+  630  ls
+  631  less langmod.cc 
+  632  cd ..
+  633  ls
+  634  cd ocr-binarize/
+  635  ls
+  636  cd ..
+  637  cd ocr-pfst/
+  638  ls
+  639  less fst-
+  640  less fst-io.h 
+  641  ls
+  642  less fst-io.h 
+  643  ls
+  644  less ocr-pfst.h 
+  645  cd ..
+  646  ls
+  647  cd pyopenfst/
+  648  ls
+  649  cd 
+  650  cd Libs/
+  651  ls
+  652  cd ..
+  653  cd h
+  654  cd Libs/
+  655  ls
+  656  cd openfst-1.1
+  657  ls
+  658  cd src/
+  659  ls
+  660  cd lib/
+  661  ls
+  662  cd ..
+  663  ls
+  664  cd include/
+  665  ls
+  666  cd ..
+  667  ls
+  668  cd lib/
+  669  ls
+  670  less fst.cc 
+  671  ls
+  672  find *.cc
+  673  find *.cc | grep topo
+  674  cd ..
+  675  ls
+  676  cd include/
+  677  ls
+  678  cd ..
+  679  cd fs
+  680  cd fst
+  681  ls
+  682  cd include/
+  683  ls
+  684  cd fst/
+  685  ls
+  686  less queue.h 
+  687  cd 
+  688  cd Projects/transforest
+  689  ls
+  690  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  691  cd 
+  692  cd h
+  693  cd lib/
+  694  cd ..
+  695  cd Libs/
+  696  ls
+  697  wget http://www.phontron.com/kyfd/tut1/tut1.tar.gz
+  698  tar xvf tut1.tar.gz 
+  699  cd tut1
+  700  ls
+  701  cd config/
+  702  ls
+  703  less tut1.xml 
+  704  ls
+  705  cd ..
+  706  ls
+  707  cd script/
+  708  ls
+  709  cd ..
+  710  ls
+  711  cd data/
+  712  ls
+  713  cd ..
+  714  ls
+  715  cd ..
+  716  cd Libs/
+  717  ls
+  718  wget http://sourceforge.net/projects/kyfd/files/kyfd-0.0.1.tar.gz/download
+  719  tar xvf kyfd-0.0.1.tar.gz 
+  720  cd kyfd-0.0.1
+  721  ls
+  722  cd src/
+  723  ls
+  724  cd include/
+  725  ls
+  726  cd ..
+  727  make
+  728  cd ..
+  729  make
+  730  ./config
+  731  ./configure 
+  732  make
+  733  cd ..
+  734  wget http://mirror.nyi.net/apache//xerces/c/3/sources/xerces-c-3.1.1.tar.gz
+  735  wget http://apache.osuosl.org//xerces/c/3/sources/xerces-c-3.1.1.tar.gz
+  736  tar xvf xerces-c-3.1.1.tar.gz 
+  737  ls
+  738  cd xerces-c-3.1.1
+  739  ls
+  740  ./configure 
+  741  make
+  742  cd 
+  743  cd Projects/transforest
+  744  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  745  cd ..
+  746  mkdir beamsearch
+  747  cd beamsearch/
+  748  ls
+  749  mkdir src
+  750  cp ~/h/Libs/
+  751  cp ~/h/Libs/kyfd-0.0.1/src/include/kyfd/beam-trim.h .
+  752  ls
+  753  cp beam-trim.h src/
+  754  cd src/
+  755  ls
+  756  less beam-trim.h 
+  757  ls
+  758  cd ..
+  759  git init
+  760  ls
+  761  rm beam-trim.h 
+  762  cd src/
+  763  ls
+  764  cd ..
+  765  hg init
+  766  cd src/
+  767  ls
+  768  hg add *
+  769  cd beam-trim.h 
+  770  cp beam-trim.h ~/h/lib/include/
+  771  cd ..
+  772  cd pyopenfst/
+  773  make
+  774  cd ..
+  775  cd transforest
+  776  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  777  kill %3
+  778  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/lm.3.sri --order 3 
+  779  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3 
+  780  less example/big.lm 
+  781  wc example/big.lm 
+  782  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3 
+  783  kill %3
+  784  jobs
+  785  kill %2
+  786  kill %1
+  787  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3 
+  788  cd ..
+  789  ls
+  790  cd ocropus/
+  791  ls
+  792  cd data/
+  793  ls
+  794  cd models/
+  795  ls
+  796  less latin3-full.model 
+  797  ls
+  798  fstprint default.fst.gz 
+  799  ls
+  800  clear
+  801  cd ..
+  802  cd transforest/
+  803  cat ~/h/core.f.parse_10.prune.tforest | python lp/decode.py --dual_fst2 -w example/config.ini --lm example/big.lm --order 3 
+  804  locate make_ngram
+  805  locate make_ngram_pfsg
+  806  locate srilm
+  807  cd ..
+  808  cd Libs/
+  809  ls
+  810  cd ..
+  811  cd h/Libs/
+  812  ls
+  813  tar xvf srilm\ \(1\).tgz 
+  814  ls
+  815  mkdir srilm
+  816  cd srilm
+  817  mv ../srilm\ \(1\).tgz .
+  818  tar xvf srilm\ \(1\).tgz 
+  819  ls
+  820  cd ..
+  821  cd Projects/transforest
+  822  ls
+  823  ~/h/Libs/srilm/utils/src/make-ngram-pfsg.gawk example/big.lm > example/big.lm.pfsg
+  824  gawk ~/h/Libs/srilm/utils/src/make-ngram-pfsg.gawk example/big.lm > example/big.lm.pfsg
+  825  gawk ~/h/Libs/srilm/utils/src/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  826  ~/h/Libs/srilm/utils/src/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  827  cd ..
+  828  ~/h/Libs/srilm/utils/src/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  829  cd transforest
+  830  ~/h/Libs/srilm/utils/src/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  831  export SRILM=$PWD
+  832  ~/h/Libs/srilm/utils/src/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  833  ~/h/Libs/srilm/bin/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  834  export PATH=$PATH:/home/rcf-40/ar_009/h/Libs/srilm/bin/
+  835  ~/h/Libs/srilm/bin/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  836  export PATH=$PATH:/home/rcf-40/ar_009/h/Libs/srilm/bin/i686/
+  837  ~/h/Libs/srilm/bin/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  838  less ~/h/Libs/srilm/bin/pfsg-from-ngram
+  839  ~/h/Libs/srilm/bin/i686/make-ngram-pfsg example/big.lm > example/big.lm.pfsg
+  840  ~/h/Libs/srilm/bin/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  841  export PATH=$PATH:/home/rcf-40/ar_009/h/Libs/srilm/bin/i686/
+  842  ~/h/Libs/srilm/bin/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  843  cp ~/h/Libs/srilm/bin/pfsg-from-ngram > scripts/
+  844  cp ~/h/Libs/srilm/bin/pfsg-from-ngram  scripts/
+  845  chmod 777 scripts/pfsg-from-ngram 
+  846  scripts/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  847  ~/h/Libs/srilm/bin/i686/pfsg-to-fsm example/big.lm.pfsg > example/big.lm.fsa
+  848  fstprint example/big.lm.fsa | less
+  849  head example/big.lm.fsa 
+  850  fstcompile example/big.lm.fsa > example/big.lm.compile.fsa
+  851  fstprint example/big.lm.compile.fsa | head
+  852  fstprint example/big.lm.compile.fsa | less 
+  853  head example/big.lm.fsa 
+  854  less example/big.lm.pfsg 
+  855  scripts/pfsg-to-fsm example/big.lm.pfsg > example/big.lm.fsa
+  856  scripts/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  857  ngram -debug 1 -prune-lowprobs -lm example/big.lm "$@" -write-lm - > example/big.prune.lm
+  858  less example/big.prune.lm 
+  859  make-ngram-pfsg example/big.lm > example/big.lm.psfg
+  860  make-ngram-pfsg < example/big.lm > example/big.lm.psfg
+  861  make-ngram-pfsg
+  862  scripts/pfsg-from-ngram example/big.lm > example/big.lm.pfsg
+  863  scripts/pfsg-to-fsm symbolic=1 symbolfile=example/big.lm.symbols example/big.lm.pfsg > example/big.lm.fsa
+  864  pfsg-to-fsm symbolic=1 symbolfile=example/big.lm.symbols example/big.lm.pfsg > example/big.lm.fsa
+  865  less example/big.lm.fsa 
+  866  fstcompile example/big.lm.fsa > example/big.lm.compile.fsa
+  867  man fstcompile
+  868  fstcompile --isymbols=example/big.lm.symbols --keep_isymbols example/big.lm.fsa > example/big.lm.compiled.fst
+  869  fstprint example/big.lm.compiled.fst | less 
+  870  head example/big.lm
+  871  pfsg-to-fsm symbolic=1 scale=0.10239488  symbolfile=example/big.lm.symbols example/big.lm.pfsg > example/big.lm.fsa
+  872  less example/big.lm.fsa 
+  873  pfsg-to-fsm symbolic=1  symbolfile=example/big.lm.symbols example/big.lm.pfsg > example/big.lm.fsa
+  874  less example/big.fsa
+  875  less example/big.lm.symbols 
+  876  python scripts/fsm2fst.py < example/big.lm.fsa | less
+  877  python scripts/fsm2fst.py < example/big.lm.fsa > example/big.lm.fst
+  878  fstcompile --isymbols=example/big.lm.symbols --keep_isymbols --osymbols=example/big.lm.symbols --keep_osymbols example/big.lm.fst > example/big.lm.compiled.fst
+  879  less example/big.lm.fst 
+  880  python scripts/fsm2fst.py < example/big.lm.fsa > example/big.lm.fst
+  881  fstcompile --isymbols=example/big.lm.symbols --keep_isymbols --osymbols=example/big.lm.symbols --keep_osymbols example/big.lm.fst > example/big.lm.compiled.fst
+  882  fstprint example/big.lm.compiled.fst | less 
+  883  fstmap -maptype times -weight 0.10239488 example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst
+  884  fstmap -map_type times -weight 0.10239488 example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst
+  885  fstmap -map_type times --weight 0.10239488 example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst
+  886  fstmap example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst -map_type=times --weight=0.10239488
+  887  fstmap example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst -map_type=times--weight=0.10239488
+  888  fstmap example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst -map_type=times -weight=0.10239488
+  889* fstmap example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst -map_type=times --weight 0.1023948
+  890  fstmap -map_type=times --weight=0.10239488 example/big.lm.compiled.fst example/big.lm.compiled.reweight.fst
+  891  fstprint example/big.lm.compiled.reweight.fst | less
+  892  fstmap -map_type=times --weight=0.141221 example/big.lm.compiled.reweight.fst example/big.lm.compiled.reweight.config.fst
+  893  fstprint example/big.lm.compiled.reweight.config.fst | less
+  894  fstprint example/big.lm.compiled.reweight.fst | less
+  895  fstprint example/big.lm.compiled.reweight.config.fst | less
+  896  python scripts/fsm2fst.py < example/big.lm.fsa > example/big.lm.fst
+  897  less example/big.lm.fst
+  898  ls
+  899  fstcompile --isymbols=example/big.lm.symbols --keep_isymbols --osymbols=example/big.lm.symbols --keep_osymbols example/big.lm.fst > example/big.lm.compiled.fst
+  900  fstprint example/big.lm.compiled.fst | less
+  901  fstdeterminize example/big.lm.compiled.fst /tmp/big.lm.determ.fst
+  902  fstminimize /tmp/big.lm.determ.fst /tmp/big.lm.min.fst
+  903  ls -l /tmp/big.lm.min.fst 
+  904  ls -l /tmp/big.lm.determ.fst 
+  905  fstrmepsilon /tmp/big.lm.min.fst /tmp/big.lm.min.rm.fst
+  906  python scripts/fsm2fst.py < example/big.lm.fsa > example/big.lm.fst
+  907  make-ngram-pfsg < example/lm.3.sri > example/small.lm.psfg
+  908  pfsg-to-fsm symbolic=1  symbolfile=example/small.lm.symbols example/small.lm.pfsg > example/small.lm.fsa
+  909  pfsg-to-fsm symbolic=1  symbolfile=example/small.lm.symbols example/small.lm.psfg > example/small.lm.fsa
+  910  python scripts/fsm2fst.py < example/small.lm.fsa > example/small.lm.fst
+  911  fstcompile --isymbols=example/small.lm.symbols --keep_isymbols --osymbols=example/small.lm.symbols --keep_osymbols example/small.lm.fst > example/small.lm.compiled.fst
+  912  fstdeterminize example/small.lm.compiled.fst /tmp/small.lm.determ.fst
+  913  fstminimize  /tmp/small.lm.determ.fst /tmp/small.lm.min.fst
+  914  fstrmepsilon  /tmp/small.lm.min.fst /tmp/small.lm.min.rm.fst
+  915  fstrmepsilon  /tmp/small.lm.min.rm.fst /tmp/small.lm.min.fst
+  916  fstminimize  /tmp/small.lm.min.rm.fst /tmp/small.lm.min.fst
+  917  fstminimize  /tmp/small.lm.determ.fst /tmp/small.lm.min.fst
+  918  fstprint /tmp/small.lm.min.fst | less
+  919  cp /tmp/small.lm.min.fst example/
+  920  history > lp/fst_history

@@ -1,0 +1,6 @@
+/var/spool/torque/mom_priv/jobs/8889663.hpc.SC: line 6: python2.6: command not found
+cleaning up /tmp/8889663.hpc-pbs.usc.edu/hadoop on each node
+Traceback (most recent call last):
+  File "/home/nlg-01/chiangd/hadoop/pbs_hadoop.py", line 36, in ?
+    subprocess.check_call(['/usr/bin/pbsdsh', 'rm', '-rf', localworkdir])
+AttributeError: 'module' object has no attribute 'check_call'

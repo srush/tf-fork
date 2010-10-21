@@ -1,0 +1,65 @@
+Job JOBID="job_201007131250_0001" JOBNAME="streamjob62747.jar" USER="ar_009" SUBMIT_TIME="1279050657481" JOBCONF="hdfs://hpc1888/tmp/8894064.hpc-pbs.usc.edu/hadoop/tmp/mapred/system/job_201007131250_0001/job.xml" 
+Job JOBID="job_201007131250_0001" LAUNCH_TIME="1279050657756" TOTAL_MAPS="1" TOTAL_REDUCES="2" 
+Task TASKID="task_201007131250_0001_m_000000" TASK_TYPE="MAP" START_TIME="1279050662736" SPLITS="" 
+Task TASKID="task_201007131250_0001_r_000000" TASK_TYPE="REDUCE" START_TIME="1279050663202" SPLITS="" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_0" START_TIME="1279050663194" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_0" TASK_STATUS="FAILED" FINISH_TIME="1279050666243" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.jar.JarFile.<init>(JarFile.java:132)
+	at java.util.jar.JarFile.<init>(JarFile.java:97)
+	at org.apache.hadoop.util.RunJar.unJar(RunJar.java:36)
+	at org.apache.hadoop.filecache.DistributedCache.localizeCache(DistributedCache.java:350)
+	at org.apache.hadoop.filecache.DistributedCache.getLocalCache(DistributedCache.java:169)
+	at org.apache.hadoop.mapred.TaskRunner.run(TaskRunner.java:140)
+" 
+ReduceAttempt TASK_TYPE="REDUCE" TASKID="task_201007131250_0001_r_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_r_000000_0" START_TIME="1279050663311" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+ReduceAttempt TASK_TYPE="REDUCE" TASKID="task_201007131250_0001_r_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_r_000000_0" TASK_STATUS="FAILED" FINISH_TIME="1279050666350" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_1" START_TIME="1279050666330" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_1" TASK_STATUS="FAILED" FINISH_TIME="1279050669375" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.jar.JarFile.<init>(JarFile.java:132)
+	at java.util.jar.JarFile.<init>(JarFile.java:97)
+	at org.apache.hadoop.util.RunJar.unJar(RunJar.java:36)
+	at org.apache.hadoop.filecache.DistributedCache.localizeCache(DistributedCache.java:350)
+	at org.apache.hadoop.filecache.DistributedCache.getLocalCache(DistributedCache.java:169)
+	at org.apache.hadoop.mapred.TaskRunner.run(TaskRunner.java:140)
+" 
+ReduceAttempt TASK_TYPE="REDUCE" TASKID="task_201007131250_0001_r_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_r_000000_1" START_TIME="1279050666412" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+ReduceAttempt TASK_TYPE="REDUCE" TASKID="task_201007131250_0001_r_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_r_000000_1" TASK_STATUS="FAILED" FINISH_TIME="1279050669451" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_2" START_TIME="1279050669447" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_2" TASK_STATUS="FAILED" FINISH_TIME="1279050672491" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.jar.JarFile.<init>(JarFile.java:132)
+	at java.util.jar.JarFile.<init>(JarFile.java:97)
+	at org.apache.hadoop.util.RunJar.unJar(RunJar.java:36)
+	at org.apache.hadoop.filecache.DistributedCache.localizeCache(DistributedCache.java:350)
+	at org.apache.hadoop.filecache.DistributedCache.getLocalCache(DistributedCache.java:169)
+	at org.apache.hadoop.mapred.TaskRunner.run(TaskRunner.java:140)
+" 
+ReduceAttempt TASK_TYPE="REDUCE" TASKID="task_201007131250_0001_r_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_r_000000_2" START_TIME="1279050669507" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+ReduceAttempt TASK_TYPE="REDUCE" TASKID="task_201007131250_0001_r_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_r_000000_2" TASK_STATUS="FAILED" FINISH_TIME="1279050672558" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_3" START_TIME="1279050672555" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" 
+MapAttempt TASK_TYPE="MAP" TASKID="task_201007131250_0001_m_000000" TASK_ATTEMPT_ID="attempt_201007131250_0001_m_000000_3" TASK_STATUS="FAILED" FINISH_TIME="1279050675595" HOSTNAME="/default-rack/hpc1881-e0.usc.edu" ERROR="java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.jar.JarFile.<init>(JarFile.java:132)
+	at java.util.jar.JarFile.<init>(JarFile.java:97)
+	at org.apache.hadoop.util.RunJar.unJar(RunJar.java:36)
+	at org.apache.hadoop.filecache.DistributedCache.localizeCache(DistributedCache.java:350)
+	at org.apache.hadoop.filecache.DistributedCache.getLocalCache(DistributedCache.java:169)
+	at org.apache.hadoop.mapred.TaskRunner.run(TaskRunner.java:140)
+" 
+Task TASKID="task_201007131250_0001_m_000000" TASK_TYPE="MAP" TASK_STATUS="FAILED" FINISH_TIME="1279050675596" ERROR="java.util.zip.ZipException: error in opening zip file
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.jar.JarFile.<init>(JarFile.java:132)
+	at java.util.jar.JarFile.<init>(JarFile.java:97)
+	at org.apache.hadoop.util.RunJar.unJar(RunJar.java:36)
+	at org.apache.hadoop.filecache.DistributedCache.localizeCache(DistributedCache.java:350)
+	at org.apache.hadoop.filecache.DistributedCache.getLocalCache(DistributedCache.java:169)
+	at org.apache.hadoop.mapred.TaskRunner.run(TaskRunner.java:140)
+" 
+Job JOBID="job_201007131250_0001" FINISH_TIME="1279050675596" JOB_STATUS="FAILED" FINISHED_MAPS="0" FINISHED_REDUCES="0" 

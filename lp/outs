@@ -1,0 +1,11 @@
+using weights:  (17 fields)
+reading lm from example/big.lm
+lm order is 3
+lm loaded in 5.87 seconds
+10 forests loaded in 0.12 secs (avg 0.01 per sent)
+ERROR: FstHeader::Read: Bad FST header: example/bigram.lm.fst
+Traceback (most recent call last):
+  File "lp/decode.py", line 1005, in <module>
+    RemoveWeight(bi_lm_fsa, blanked_bi_lm_fsa)
+NameError: name 'RemoveWeight' is not defined
+Warning: leaking Ngram instance instead of deleting

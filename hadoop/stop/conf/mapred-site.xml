@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><?xml-stylesheet type="text/xsl" href="configuration.xsl"?><!-- Put site-specific property overrides in this file. --><configuration>
+
+<property>
+  <name>mapred.map.output.compression.type</name>
+  <value>RECORD</value>
+  <description>If the map outputs are to compressed as SequenceFiles, how should
+               they be compressed? Should be one of NONE, RECORD or BLOCK.
+  </description>
+</property>
+
+<property>
+  <name>mapred.compress.map.output</name>
+  <value>true</value>
+  <description>Should the outputs of the maps be compressed before being
+               sent across the network. Uses SequenceFile compression.
+  </description>
+</property>
+
+<property>
+  <name>mapred.map.output.compression.codec</name>
+  <value>org.apache.hadoop.io.compress.GzipCodec</value>
+  <description>If the map outputs are compressed, how should they be 
+               compressed?
+  </description>
+</property>
+
+<property><name>mapred.job.tracker</name><value>hpc1854:50000</value></property><property><name>mapred.reduce.tasks</name><value>7</value></property><property><name>mapred.task.timeout</name><value>600000</value></property></configuration>
