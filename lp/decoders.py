@@ -197,8 +197,8 @@ class LMDecoderFST(object):
     #self.just_wefight_fst = None
     self.first_weights = True
     self.round = 0
-    self.beamCard = 50
-    self.beamRad  = 0.2
+    self.beamCard = 200
+    self.beamRad  = 1.0
     print "Done"
     # print "FSAing"
 
@@ -392,9 +392,8 @@ class LMDecoderFST(object):
   def calc_heuristic(self):
     tmp1 = openfst.StdVectorFst()
     tmp3 = openfst.StdVectorFst()
-    #tmp4 = openfst.Copy(self.heuristic_fst)
+
     print "len ", self.output_bound+1
-    #self.heuristic_fst.Write("/tmp/heuristic.fsa")
     starttime2 = time.time()
     endtime2 = time.time()
     print "ShortViterbi", endtime2 - starttime2
@@ -440,6 +439,7 @@ class LMDecoderFST(object):
       print self.words[p], p, self.lagrangians["alpha"]["UNI"+str(p)]
     print "\n\n\n"
 
+    print rpath
     print "Actual value ", self.score_path(rpath) + total
       
     end_time_heu = time.time()
@@ -608,7 +608,7 @@ class LMDecoderFST(object):
   def decode(self):
     "create an fst out of the lagrangians, and compose it"
     self.round += 1
-
+    print "LM DECODER \n\n"
     (path,best) = self.beam_search()
     print "ShortestPath "
     
@@ -621,7 +621,7 @@ class LMDecoderFST(object):
     sent = []
     i = 0
 
-    print "LM DECODER \n\n"
+
 
     for p in path:
         if p == 0 or p == tree_extractor.SRC_NODE or p == tree_extractor.PRE_WORD: continue 
@@ -646,24 +646,25 @@ class LMDecoderFST(object):
     return self.lm_weight * self.lm.word_prob_bystr(super_strip(w2), super_strip(w1))
 
   def score_path(self, path):
-    #lm2 = fsa.check_fst(path, self.original_fst, self.words)
     inter_fsa = openfst.StdVectorFst()
     short = openfst.StdVectorFst()
     chain_fsa = fsa.make_chain_fsa(path, self.original_fst.InputSymbols())
     print "CHAIN"
-    #fsa.print_fst(chain_fsa)
+    fsa.print_fst(chain_fsa)
     path = openfst.IntVector()
     distances = openfst.FloatVector()
     reached = openfst.IntVector()
 
     openfst.Intersect(self.original_fst, chain_fsa, inter_fsa)
 
+
     openfst.ShortestPath(inter_fsa,short, 1)
     #self.pruner.BeamPruneAndOrder(short,
     #                              openfst.StdVectorFst(), self.beamRad, self.beamCard, 
     ##                              self.lagrange_symbol, self.lagrange_weight, path, distances,
     #                              reached)
-
+    assert short.NumStates() <> 0
+    print "checking weight"
     lm2 = fsa.get_weight(short)
     return lm2
   

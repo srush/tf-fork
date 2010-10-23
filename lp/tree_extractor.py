@@ -161,7 +161,7 @@ class NodeExtractor(object):
       print >> sys.stderr, word, s, self.lm[s], lm_weight * orig_lm.word_prob_bystr(word, "")
 
   def set_uni_model(self, orig_lm, lm_weight):
-    #self.lm = lm
+    "Create the tree with a unigram language model"
     self.lm_weight = lm_weight
     self.unigram_on = True
     self.lm = orig_lm

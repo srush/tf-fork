@@ -1026,40 +1026,28 @@ if __name__ == "__main__":
         #  for edge in node.edges:
         #    print edge.position_id
 
-
+        # the symbol table of the language model
         s_table = openfst.SymbolTable.ReadText(FLAGS.lm_symbol)
         
-        print "Extracting Tree"
+
+        # An FSA for the forest 
         ex = tree_extractor.NodeExtractor(False, s_table, 0.0)
         fsa = ex.extract(forest)
 
-        # build one with a unigram for pruning
+        # Copy of the original
         no_uni_ex = tree_extractor.NodeExtractor(False, s_table, 0.0)
         no_uni_fsa = no_uni_ex.extract(forest)
-
-
-
-        # for debugging
-#         tmp1 = {}
-#         tmp2 = {}
-#         for word in ex.real_word:
-#           if lm_uni_heuristic.has_key(word):
-#             tmp1[word] = lm_uni_heuristic[word]
-#             tmp2[word] = lm_uni_heuristic_set[word]
-#         hand = open("example/heuristic.first", 'wb')
-#         cPickle.dump((tmp1, tmp2), hand) 
-#         exit()
         
-        print "Extracting LM"
+        # Don't need to extract lm (use big lm)
         #lm_ex = tree_extractor.LMExtractor(lm, original_weights["lm"], ex.s_table)# , length_weight)
         #lm_fsa = lm_ex.extract(ex.words, ex.nt_states)
 
-
+        # change the lm symbols to match the tree
         lm_fsa.SetInputSymbols(ex.s_table)
         lm_fsa.SetOutputSymbols(ex.s_table)
 
 
-
+        # counting language model (count source words
         count_ex = tree_extractor.TreeCounterFSA(ex.s_table)
         def count_nodes(n):
           t = 0 
@@ -1070,20 +1058,15 @@ if __name__ == "__main__":
           return t
         count = count_nodes(forest.root)
         count_fsa = count_ex.extract(count, ex.words, ex.nt_states, 0.0, new_weights, 0.0)
+
+        # Another fsa that counts each source symbol used as output
         count_step_fsa = count_ex.extract(count, ex.words, ex.nt_states, 1.0, new_weights, 0.0)
 
-        #count_fsa.Write("/tmp/count.fsa") 
+
         print "FOREST SIZE", count
         
         table = dict([(output, word) for (word, output) in ex.words] +[(output, word) for (word, output) in ex.nt_states])
 
-        #print_fst(count_fsa, table, True)
-        #print_fst(lm_fsa, table, True)
-        #print_fst(lm_fsa, table, True)
-        #node_map = dict_multi([(nt[0].position_id, output) for (nt, output) in ex.nt_states] )
-        #for n in node_map:
-          #assert len(node_map[n]) == 2
-        #print node_map
         word_map = dict_multi(#[(int(word[0].split("+++")[0]), output) for (word, output) in ex.word_set.iteritems()] +
                               [(int(word[0].split("+++")[-2]), output) for (word, output) in ex.nt_states] )
         
@@ -1124,23 +1107,7 @@ if __name__ == "__main__":
         fsa2 = FSA.rho_compose(det_fsa, False, det_lm_fsa, True, True)
 #        tree_count_fsa = FSA.rho_compose(det_fsa, False, count_fsa, True, True)
 
-        shortest = openfst.StdVectorFst()
-#        openfst.ShortestPath(det_fsa, shortest, 1)
-#        openfst.TopSort(shortest)
-        #shortest.Write("/tmp/short.fsa")
-        #FSA.print_fst(shortest)
-        #fsa2 = det_fsa
-        #fsa2 = det_fsa
-        #print "Size %s" %(fsa2.NumStates())
-        #openfst.ArcSortInput(det_lm_fsa)
-        #fsa2 = FSA.rho_compose(det_fsa, False, det_lm_fsa, True)
-
-        # opts = openfst.StdRhoComposeOptions()
-#         opts.gc = False
-#         fsa2 = openfst.StdComposeFst(det_lm_fsa, det_fsa, opts)
-
-        #fsa2 = det_fsa
-        
+        shortest = openfst.StdVectorFst()        
 
         bests = {}
         totals = {}
@@ -1186,36 +1153,17 @@ if __name__ == "__main__":
           #print "LM Inter size", det_fsa2.NumStates()
           
           det_tree_count_fsa = openfst.StdVectorFst()
-#          
-#          openfst.Minimize(det_tree_count_fsa)
-#          openfst.Connect(det_tree_count_fsa)
 
-          #openfst.RmEpsilon(count_fsa)
-          #openfst.Minimize(count_fsa)        
           print "ArcSortInput"
           openfst.ArcSortInput(count_fsa)
-          #openfst.ArcSortInput(count_fsa1)
         else:
           det_fsa2 = fsa2
-        #print_fst(fsa, table, True)
-        #det_fsa3 = FSA.rho_compose(fsa2, True, count_fsa, True)
 
         
         #openfst.RmEpsilon(det_fsa2)
         #print "Size of 2 %s %s"%(det_fsa2.NumStates(), det_tree_count_fsa.NumStates())
         #original_size = det_fsa2.NumStates()
         fsa3 = FSA.rho_compose(det_fsa2, False, count_fsa, True, True)
-        #fsa3 = openfst.StdVectorFst()
-        #openfst.Intersect(det_fsa2, det_tree_count_fsa, fsa3)
-        #fsa3 = FSA.rho_compose(det_fsa2, False, count_fsa, True, False)
-        
-        #fsa3 = det_fsa2
-        
-        #openfst.Intersect(count_fsa, det_fsa2, fsa3)        
-        #fsa3 = det_fsa2
-        #fsa3 = det_fsa2d
-        
-        #print "Size %s" %fsa3.NumStates()
 
         if  minimize:
           print "minimize fsa3"
@@ -1267,18 +1215,14 @@ if __name__ == "__main__":
         print "Set Heuristic"
 
         uni_ex = tree_extractor.NodeExtractor(False, s_table, 0.0)
-        #uni_ex.set_uni_model(lm, lm_uni_heuristic, lm_uni_heuristic_set, original_weights["lm"], ex.real_word)
         uni_ex.set_uni_model(lm, original_weights["lm"])
-
-        #uni_ex.set_uni_model(lm, bests, original_weights["lm"])
         uni_fsa = uni_ex.extract(forest)
 
 
-        
+        # set a unigram heuristic for the language model 
         lm_decoder.set_heuristic_fsa(no_uni_fsa, uni_fsa, count_fsa, count_step_fsa, ex.nt_states, ex.s_table.AvailableKey())
-        
-                                  #forest.len, table.keys(), table, extract.edge_to_states, extract.states_to_edge, extract.output_to_states,extract.states_to_output, lm, weights["lm"])
-        #score, words = lm_decoder.decode()
+
+
         tree_decoder = decoders.TreeDecoder(forest, weights, word_map, table, ex.word_set, ex.s_table)
         
 
