@@ -1022,83 +1022,10 @@ if __name__ == "__main__":
     openfst.ArcSortInput(blanked_bi_lm_fsa)
     openfst.ArcSortInput(bi_lm_fsa)
     for i, forest in enumerate(f, 1):
-      if FLAGS.extract:
-        ex = tree_extractor.NodeExtractor()
-        fsa = ex.extract(forest)
-
-        lm_ex = tree_extractor.LMExtractor(lm, weights["lm"]) #, length_weight)
-        lm_fsa = lm_ex.extract(forest, ex.words, ex.nt_states)
-        
-        count_ex = tree_extractor.CounterFSA()
-        count_fsa = count_ex.extract(len(forest), ex.words, ex.nt_states)
-   
-        table = dict([(output, word) for (word, output) in ex.words] +[(output, word) for (word, output) in ex.nt_states])
-        
-        #openfst.RmEpsilon(fsa)
-        #openfst.RmEpsilon(lm_fsa)
-        openfst.ArcSortInput(fsa)
-        fsa2 = openfst.StdVectorFst()
-        fsa3 = openfst.StdVectorFst()
-        openfst.Intersect(fsa, lm_fsa, fsa2)
-        openfst.ArcSortInput(count_fsa)
-        openfst.Intersect(fsa2, count_fsa, fsa3)
-        
-        best = openfst.StdVectorFst()
-        
-        openfst.ShortestPath(fsa3,best, 1)
-        openfst.TopSort(best)
-        #print "State %s"%fsa.NumStates()
-        #print "State %s"%lm_fsa.NumStates()
-        #print "State %s"%fsa2.NumStates()
-        
-        #print_fst(fsa, table, True)
-        #print_fst(lm_fsa, table, True)
-        print_fst(best, table, True)
-        
-#         extract = LMExtractor(lm, weights["lm"])
-#         fst, table, _ = extract.extract(forest)
-#         best = openfst.StdVectorFst()
-#         openfst.ShortestPath(fst,best, 1)
-#         openfst.TopSort(best)
-#         print_fst(fst, table, True)
-#         print_fst(best, table, False)
-
-
-
-      elif FLAGS.dual_fst:
-        extract = LMExtractor(lm, weights["lm"])
-        fst, table, symbols = extract.extract(forest)
-        det_fst = openfst.StdVectorFst()
-        final_fst = openfst.StdVectorFst()
-
-
-        print "Minimizing"
-        openfst.RmEpsilon(fst)
-        openfst.Determinize(fst,det_fst)
-        openfst.Minimize(det_fst)
-        print "Done Minimizing"
-        
-        lm_decoder = LMDecoderFST(fst, forest.len, table.keys(), table, extract.edge_to_states, extract.states_to_edge, extract.output_to_states,extract.states_to_output, lm, original_weights["lm"])
-        #score, words = lm_decoder.decode()
-        tree_decoder = TreeDecoder(forest, weights, symbols, table)
-        
-        # score, argmax, (subtree,_,_) = tree_decoder.decode()
-#         print subtree
-#         print_weights(argmax["alpha"])
-#         print_weights(words["alpha"])
-
-#         for feat in words["alpha"]:
-#           print feat, table[int(feat)], words[feat]
-#         print score
-
-        dual = SimpleDual(tree_decoder, lm_decoder)
-        dual.should_print = True
-        print dual.run()
-        #exit()
-      elif FLAGS.dual_fst2:
+      if FLAGS.dual_fst2:
         print "Forest ", i
         forest.number_nodes()
-        if len(forest) < 30: continue
+        if len(forest) > 15: continue
         #for node in forest :
         #  for edge in node.edges:
         #    print edge.position_id

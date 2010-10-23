@@ -15,5 +15,7 @@ def super_strip(word):
   return strip_lex(word.split("+++")[0])
 
 def get_sym_pos(word):
-  assert word[0] == "x"
-  return int(word[1:])
+  assert False
+  
+  #assert word[0] == "x"
+  #return int(word[1:])

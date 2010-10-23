@@ -6,34 +6,16 @@ import time
 import tree_extractor
 from itertools import *
 import math, sys
-
+from util import *
 
 def uninf(u):
   if math.isinf(u): return 1e10
   else: return u
-  
-def is_lex(word):
-  return word[0]=="\""
-
-def strip_lex(word):
-  if word == "\"": return word
-  elif word == "\"\\\"\"": return "\""
-  return word.strip("\"")
-
-def super_strip(word):
-  return strip_lex(word.split("+++")[0])
-
-def get_sym_pos(word):
-  assert word[0] == "x"
-  return int(word[1:])
 
 class TreeDecoder(object):
   """
   Enforce that the parse is a valid tree
-  """
-  def get_node_index(self, node):
-    return self.node_map[node.position_id]
-  
+  """  
   def __init__(self, forest, weights, word_map, words, lit_words, s_table):    
     self.weights = weights
     self.forest = forest.copy()
@@ -41,26 +23,24 @@ class TreeDecoder(object):
     self.lit_words = lit_words
     self.words = words
 
-
-    # node_map from node.position_id to output
-    #self.node_map = node_map
     # word_map from edge.position_id to word outputs
     self.word_map = word_map
     
     # augment features in forest with edge names for lagrangians
     for node in self.forest:
-      #node_ind = self.get_node_index(node)
-      #for id in self.node_map.get(node.position_id, []):
-      #  node.fvector["UNI" + str(id)] = 1.0
       for edge in node.edges:
         for sym in edge.rule.rhs:
           if is_lex(sym):
             edge.fvector["UNI" + str(self.lit_words[sym].id)] += 1.0
+
         for id in self.word_map.get(edge.position_id, []):
-          #print edge, words[id], id
           edge.fvector["UNI" + str(id)] = 1.0
                   
     self.lagrangians = {"alpha" : Vector(), "beta" : Vector()}
+
+
+  def get_node_index(self, node):
+    return self.node_map[node.position_id]
 
   def bad_approx(self):
     pass
@@ -549,33 +529,36 @@ class LMDecoderFST(object):
     shortest = openfst.StdVectorFst()
     print "ShortestPath "
     
-    starttime = time.time()
-    if self.non_neg:
-      print "Dijkstra"
-      openfst.ShortestPathDijkstra(self.temp_fst, shortest, 1)
-    elif self.viterbi:
+    if True:
       print "Beam", self.output_bound
       beamed_fst = openfst.StdVectorFst()
       inter = openfst.StdVectorFst()
+
+
 #       print "Heu"
 #       starttime2 = time.time()
 #      a,b,c = self.calc_heuristic()
 #       endtime2 = time.time()
 #       print "done heu", endtime2 - starttime2
+
       starttime2 = time.time()
-      #if self.round % 10 == 0: 
-        #beam = 20.0
-        #beamCard = 100000
-      #else:
+
+
+      
+      # If we haven't created our pruning options, make them here
+      if self.pruner == None:
+        self.pruner = openfst.BeamPrune(self.original_size, self.output_bound+1, tree_extractor.SRC_NODE, self.last_sym)
+        print self.output_bound+1
+        print self.last_sym
+
+
       beam = self.beamRad
       beamCard = self.beamCard
-      #if self.round > 20:
-        #beamCard = 500
-      #if self.round > 100:
-        #beamCard = 1000
-      #openfst.BeamPruneAndOrder(self.temp_fst, beamed_fst, beam, tree_extractor.SRC_NODE, self.output_bound+1, a, b ,c)
 
+      # Holds the distances to each node
       distances = openfst.FloatVector()
+
+      # arrays for the extra lagrangian values
       self.lagrange_symbol = openfst.IntVector()
       self.lagrange_weight = openfst.FloatVector()
       for feat in self.lagrangians["alpha"]:
@@ -585,14 +568,14 @@ class LMDecoderFST(object):
       
       
       path = openfst.IntVector()
-      if self.pruner == None:
-        self.pruner = openfst.BeamPrune(self.original_size, self.output_bound+1, tree_extractor.SRC_NODE, self.last_sym)
-        print self.output_bound+1
-        print self.last_sym
-      start_time_heu  = time.time()
 
+
+      # Calculate the heuristic values for the search  
+      start_time_heu  = time.time()
       distances,reached = self.calc_heuristic()
       end_time_heu  = time.time()
+
+      
       print "HEU time", end_time_heu - start_time_heu
       self.pruner.SetHeuristicBack(distances, reached, self.topo_dist, self.state_symbol)
       #self.pruner.SetHeuristic(openfst.IntVector(), openfst.IntVector(),openfst.FloatVector())
@@ -604,6 +587,7 @@ class LMDecoderFST(object):
       reached = openfst.IntVector()
       #fsa.print_fst(openfst.StdVectorFst(self.temp_fst))
       #if self.round % 10 <> 0:
+
       distBestFinal = self.pruner.BeamPruneAndOrder(self.temp_fst,
                                                 beamed_fst, beam, beamCard, 
                                                 self.lagrange_symbol, self.lagrange_weight, path, distances,
@@ -613,138 +597,46 @@ class LMDecoderFST(object):
       #bestFinal = self.pruner.AStar(self.temp_fst,
       #                              self.lagrange_symbol, self.lagrange_weight, path, distances,
       #                              reached)
-#      
-#                                openfst.IntVector(), openfst.FloatVector(), path)
-#                                
-      #exit()
-      
-      #slf.temp_fst.Write("/tmp/test.fsa")
-      
-      #beamed_fst = self.temp_fst
+#                                      openfst.IntVector(), openfst.FloatVector(), path)
+
       endtime2 = time.time()
+      
       print "BEAMING", endtime2 - starttime2
-      # reverse = openfst.StdVectorFst()
-#       reverse_back = openfst.StdVectorFst()
-#       beamed2 = openfst.StdVectorFst()
-#       openfst.Reverse(self.temp_fst, reverse)
-#       openfst.BeamPruneAndOrder(reverse, beamed2, beam, tree_extractor.SRC_NODE, self.output_bound+2)
-#       openfst.Reverse(beamed2, reverse_back)
-#       openfst.ArcSortInput(beamed_fst)
-#       openfst.Intersect(reverse_back, beamed_fst, inter)
-
-      print "Viterbi", inter.NumStates()
-      #fsa.print_fst(beamed_fst)
-      #openfst.Connect(beamed_fst)
-      print "Connect", inter.NumStates()
-      
-      
+            
       print "DONE"
-      #openfst.ShortestPathViterbi(beamed_fst, shortest, 1)
-#       t1 = openfst.StdVectorFst()
-#       beamed_fst.SetInputSymbols(self.temp_fst.InputSymbols())
-#       beamed_fst.SetOutputSymbols(self.temp_fst.OutputSymbols())
-#       openfst.ArcSortInput(beamed_fst)
-#       openfst.ArcSortInput(shortest)
-#       openfst.RmEpsilon(beamed_fst)
-#       #openfst.Intersect(beamed_fst, shortest, t1)
-      
-#       print "FSA SHORTEST"
-#       openfst.TopSort(shortest)
-#       #fsa.print_fst(shortest)
-#       path = []
-#       for i in range(shortest.NumStates()):
-#         for j in range(shortest.NumArcs(i)):
-#           if shortest.GetOutput(i,j) <> 0:
-#             path.append(shortest.GetOutput(i,j))
 
-      #fsa.check_fst(path, beamed_fst, self.words)
-      
-      #print "Length ", shortest.NumStates()
-      #print "Length ", t1.NumStates()
-      #openfst.ShortestPathViterbi(inter, shortest, 1)
-      #openfst.ShortestPathViterbi(self.temp_fst, shortest, 1)
-    else:
-      print "Bellman-Ford"
-      openfst.ShortestPath(self.temp_fst, shortest, 1)
-    endtime = time.time()
-    print "ShortestPath %s" % (endtime - starttime)
-
-    #shortest = openfst.StdVectorFst()
-    #openfst.ShortestPath(self.temp_fst, shortest, 1)
-    #endtime = time.time()
-    #print "RegShortestPath %s" % (endtime - starttime)
-
-    
-    #openfst.TopSort(shortest)
-    #openfst.RmEpsilon(shortest)
-
-    output = Vector()
-    total = 0.0
-    withv = 0.0
-    without = 0.0
-    sent = []
-    i = 0
-    #print shortest.NumStates()
-
-
-    print "LM DECODER \n\n"
-    #print "BEST", bestFinal
-    total = distBestFinal
-    
+    # the shortest path
     path = list(path)
     path.reverse()
-#    for i in range(shortest.NumStates()):
-#      assert shortest.NumArcs(i) <= 1
-#      for j in range(shortest.NumArcs(i)):
-    for p in path:
-        #p = shortest.GetOutput(i,j)
 
+    # Done searching, now process all this information
+    return self.process_shortest(path, distBestFinal)
+
+  def process_shortest(self, path, total):
+    output = Vector()
+    sent = []
+    i = 0
+
+    print "LM DECODER \n\n"
+
+    for p in path:
         if p == 0 or p == tree_extractor.SRC_NODE or p == tree_extractor.PRE_WORD: continue 
 
-        #(a,b) = self.output_to_states[p]
-        #total += shortest.GetWeight(i,j)
-        #print str(self.words[p]) if p <>0 else "eps", shortest.GetWeight(i,j),  shortest.GetWeight(i,j)- self.lagrangians["alpha"]["UNI" + str(p)]
         
         sent.append(self.words[p])
         print self.words[p], p #shortest.GetWeight(i,j),  shortest.GetWeight(i,j)- self.lagrangians["alpha"]["UNI" + str(p)], self.lagrangians["alpha"]["UNI" + str(p)], p
-        #if "+++" in self.words[p][0]:
+
           
         if p > tree_extractor.PRE_WORD:
           output["UNI"+str(p)] += 1.0
-        #withv += self.lagrangians["alpha"]["UNI" + str(p)]
-        #without += shortest.GetWeight(i,j)- self.lagrangians["alpha"]["UNI" + str(p)]
 
-    #total += shortest.FinalWeight(i)
-    #total = fsa.get_weight(shortest)
-    #print "FINAL " ,shortest.FinalWeight(i)
-    #print "COMP ", total, fsa.get_weight(shortest)
-
-    #without += shortest.FinalWeight(i)
-    #print "with %s" %withv
-    #print "without %s "% without
-    #print "\n\n"
     fsent = [s  for s in sent if isinstance(s, str)] 
     print " ".join(map(super_strip, fsent))
 
-    if self.first_best == None:
-      self.first_best = total
     print "The total is", total
       
     return (total, {"alpha":output, "beta":Vector()}, (fsent, None, None))
 
-  def reprune(self):
-    prune = self.cur_best - self.first_best 
-    assert prune > 0.0, "%s %s"%(self.cur_best, self.first_best)
-    # if False and prune < self.last_prune - 1 or prune < self.last_prune * 0.75:
-#       self.last_prune = prune
-#       openfst.Prune(self.fst, prune + 0.1)
-#       #openfst.Minimize(self.fst)
-#       #openfst.ArcSortInput(self.fst)
-      
-#       print "New Prune is %s"%(self.cur_best - self.first_best)
-#       self.temp_fst = openfst.StdVectorFst()
-#       openfst.Intersect(self.fst, self.just_weight_fst, self.temp_fst)
-    #self.temp_fst = fsa.rho_compose(self.just_weight_fst, False, self.fst, False)
         
   def score_lm(self, w1, w2):
     return self.lm_weight * self.lm.word_prob_bystr(super_strip(w2), super_strip(w1))
@@ -801,9 +693,7 @@ class LMDecoderFST(object):
 
     without_lagrangians = self.lagrangians["alpha"].dot(fv) + self.lagrangians["beta"].dot(fv) 
     #print "Just %s"% without_lagrangians
-    if lm2 < self.cur_best:
-      self.cur_best = lm2
-      #self.reprune()
+      
     return (lm2, lm2 + without_lagrangians)
     #return (lm2-without_lagrangians, lm2)
 
