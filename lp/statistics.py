@@ -1,16 +1,16 @@
-
+# -*- coding: utf-8 -*-
 import gflags as flags
 from util import *
-import sys
+import sys,os
 from itertools import *
-sys.path.append('..')
+sys.path.append(os.getenv("TFOREST"))
 import gflags as flags
-from ngram import Ngram
+#from ngram import Ngram
 from model import Model
 from forest import Forest
 from svector import Vector
 from lattice_extractor import *
-
+from pygraphviz import *
 
 
 def query_trigram(node):
@@ -64,6 +64,7 @@ if __name__ == "__main__":
 
     f = Forest.load("-", is_tforest=True, lm=None)
     for i, forest in enumerate(f, 1):
+      if len(forest) < 10 or len(forest) > 15: continue
       words = set()
       for n in forest:
         for edge in n.edges:
@@ -73,10 +74,21 @@ if __name__ == "__main__":
       print len(words)
       
       graph = NodeExtractor().extract(forest)
-
+      G=AGraph(strict=False,directed=True)
+      G.graph_attr['rankdir']='LR'
+      #G.charset = 'ascii'
       for n in graph:
         print "%s -> "%n
-        #for e in n.edges:
-          #print "\t %s"%e
-        print query_trigram(n)
+
+        G.add_node(str(n))
+        node = G.get_node(str(n))
+        node.attr["color"] = n.color()
+      
+      for n in graph:
+        for e in n.edges:
+          print "\t %s"%e
+          G.add_edge(str(n), str(e))
+
+      G.draw("/tmp/graph.ps", prog="dot")
       print len(graph.first.edges)
+      break

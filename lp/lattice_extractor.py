@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 from util import *
 
 
@@ -8,7 +8,10 @@ class Graph(object):
     self.nodes = []
     self.first = None
     self.id = 0
+
+    self.check = set()
   def register_node(self, node):
+    assert node not in self.nodes
     self.nodes.append(node)
     self.id += 1 
     return self.id
@@ -32,14 +35,20 @@ class NonTermNode(LatNode):
     self.forest_node = forest_node
     self.dir = dir
   def __str__(self):
-    return "NT %s %s"%(self.forest_node, self.dir)
+    return "%s %s %s"%(self.forest_node, self.dir, self.id)
+
+  def color(self):
+    return "red"
 
 class LexNode(LatNode):
   def __init__(self, graph, lex):
     LatNode.__init__(self, graph)
     self.lex = lex
   def __str__(self):
-    return "Lex %s "%(self.lex)
+    return "%s %s"%(strip_lex(self.lex), self.id)
+
+  def color(self):
+    return "blue"
     
 
 class InternalNode(LatNode):
@@ -53,12 +62,15 @@ class InternalNode(LatNode):
       self.pos = pos +1
     else :
       self.pos = pos
+
   def __str__(self):
     rhs = self.rule.rhs[:]
     rhs.insert(self.pos, ".")
     rhsstr = " ".join(rhs)
-    return "Int %s %s %s"%(rhsstr, self.name, self.dir)
+    return "%s %s %s"%(rhsstr, self.dir, self.id)
 
+  def color(self):
+    return "green"
 
 
 
@@ -95,8 +107,9 @@ class NodeExtractor(object):
       rhs = edge.rule.rhs
       
       # always start with the parent down state ( . P )       
-      
+      nts_num = 0
       for i,sym in enumerate(rhs):
+        
 
         # next is a word ( . lex ) 
         if is_lex(sym):
@@ -110,10 +123,11 @@ class NodeExtractor(object):
         else:
           # it's a symbol
 
-          # local symbol name (lagrangians!)
-          pos = get_sym_pos(sym)
-          to_node = edge.subs[pos]
 
+          # local symbol name (lagrangians!)
+          #pos = get_sym_pos(sym)
+          to_node = edge.subs[nts_num]
+          nts_num += 1
           # We are at (. N_id ) need to get to ( N_id .) 
 
           # First, Create a unique named version of this state (. N_id) and ( N_id . )
