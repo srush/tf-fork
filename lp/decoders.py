@@ -99,7 +99,8 @@ class TreeDecoder(object):
       full_path.append(pre)  
     
     symbols = [s for s in word_uni if int(self.words[s][0].split("+++")[2]) >= 0]
-    lex = 0 
+    lex = 0
+    nts_num = 0
     for sym in edge.rule.rhs:
       if is_lex(sym):
         #pass
@@ -118,7 +119,9 @@ class TreeDecoder(object):
         full_path.append(tree_extractor.SRC_NODE)
         full_path.append(symbols[lex])
         lex +=1
-        full_path += self.extract_path(edge.subs[get_sym_pos(sym)])
+        
+        full_path += self.extract_path(edge.subs[nts_num])
+        nts_num += 1
         full_path.append(tree_extractor.SRC_NODE)
         full_path.append(symbols[lex])
 
