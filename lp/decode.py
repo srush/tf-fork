@@ -970,7 +970,6 @@ if __name__ == "__main__":
     flags.DEFINE_string("beta", None, "the maximum items (pop from PQ): ratio*b")
   
     flags.DEFINE_string("lm_fsa", None, "the language model FSA")
-    flags.DEFINE_string("bi_lm_fsa", None, "the reduced language model FSA")
     flags.DEFINE_string("lm_symbol", None, "the language model symbol table")
     flags.DEFINE_string("lm_heuristic", None, "the language model heuristic table")
     
@@ -993,7 +992,7 @@ if __name__ == "__main__":
     #del weights["text-length"]
     
     lm_fsa = openfst.Read(FLAGS.lm_fsa)    
-    bi_lm_fsa = openfst.Read(FLAGS.bi_lm_fsa)
+    
 
 
     lm_uni_heuristic = {}
@@ -1016,11 +1015,8 @@ if __name__ == "__main__":
     #gc.enable()
     
 
-    print "Size of big", bi_lm_fsa.NumStates()
-    blanked_bi_lm_fsa = openfst.StdVectorFst()
-    openfst.RemoveWeight(bi_lm_fsa, blanked_bi_lm_fsa)
-    openfst.ArcSortInput(blanked_bi_lm_fsa)
-    openfst.ArcSortInput(bi_lm_fsa)
+
+
     for i, forest in enumerate(f, 1):
       if FLAGS.dual_fst2:
         print "Forest ", i
@@ -1032,7 +1028,6 @@ if __name__ == "__main__":
 
 
         s_table = openfst.SymbolTable.ReadText(FLAGS.lm_symbol)
-
         
         print "Extracting Tree"
         ex = tree_extractor.NodeExtractor(False, s_table, 0.0)
@@ -1063,20 +1058,7 @@ if __name__ == "__main__":
         lm_fsa.SetInputSymbols(ex.s_table)
         lm_fsa.SetOutputSymbols(ex.s_table)
 
-        bi_lm_fsa.SetInputSymbols(ex.s_table)
-        bi_lm_fsa.SetOutputSymbols(ex.s_table)
 
-        blanked_bi_lm_fsa.SetInputSymbols(ex.s_table)
-        blanked_bi_lm_fsa.SetOutputSymbols(ex.s_table)
-
-        #fsa.Write("/tmp/tree.fsa") 
-        #lm_fsa.Write("/tmp/lm.fsa") 
-
-
-#         print "Extracting Counter"
-        #count_ex1 = tree_extractor.CounterFSA()
-#         print "Length Weight", weights["text-length"]
-        #count_fsa = count_ex1.extract(len(forest), ex.words, ex.nt_states, 0.0)
 
         count_ex = tree_extractor.TreeCounterFSA(ex.s_table)
         def count_nodes(n):
@@ -1293,7 +1275,7 @@ if __name__ == "__main__":
 
 
         
-        lm_decoder.set_heuristic_fsa(no_uni_fsa, uni_fsa, count_fsa, count_step_fsa, bi_lm_fsa, blanked_bi_lm_fsa, ex.nt_states, ex.s_table.AvailableKey())
+        lm_decoder.set_heuristic_fsa(no_uni_fsa, uni_fsa, count_fsa, count_step_fsa, ex.nt_states, ex.s_table.AvailableKey())
         
                                   #forest.len, table.keys(), table, extract.edge_to_states, extract.states_to_edge, extract.output_to_states,extract.states_to_output, lm, weights["lm"])
         #score, words = lm_decoder.decode()

@@ -300,13 +300,12 @@ class LMDecoderFST(object):
     #self.temp_fst = self.fst
 
 
-  def set_heuristic_fsa(self, simple_tree, orig_uni_tree, simple_count, step_count, bi_lm_fsa, blanked_bi_lm_fsa, nts, last_sym):    
+  def set_heuristic_fsa(self, simple_tree, orig_uni_tree, simple_count, step_count, nts, last_sym):    
     """
     simple_tree - FSA of trans tree with zero weights
     orig_uni_tree - FSA of trans tree with unigram weights
     simple_count - FSA with counting
     step_count - FSA with 1.0 penalty for each step
-    bi_lm_fsa - bigram language model fsa
     nts- map of all non-terms
     """
 
@@ -522,13 +521,8 @@ class LMDecoderFST(object):
 
     return distances, reached
 
-          
-  def decode(self):
-    "create an fst out of the lagrangians, and compose it"
-    self.round += 1
-    shortest = openfst.StdVectorFst()
-    print "ShortestPath "
-    
+
+  def beam_search(self):
     if True:
       print "Beam", self.output_bound
       beamed_fst = openfst.StdVectorFst()
@@ -608,9 +602,19 @@ class LMDecoderFST(object):
     # the shortest path
     path = list(path)
     path.reverse()
+    return (path, distBestFinal)
+    
+    
+  def decode(self):
+    "create an fst out of the lagrangians, and compose it"
+    self.round += 1
+
+    (path,best) = self.beam_search()
+    print "ShortestPath "
+    
 
     # Done searching, now process all this information
-    return self.process_shortest(path, distBestFinal)
+    return self.process_shortest(path, best)
 
   def process_shortest(self, path, total):
     output = Vector()
