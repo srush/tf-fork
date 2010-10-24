@@ -267,7 +267,7 @@ class NodeExtractor(object):
       
       # always start with the parent down state ( . P ) 
       
-      
+      nts_num =0 
       for i,sym in enumerate(rhs):
         extra = "+++"+str(edge.position_id)+"+++"+str(i)
 
@@ -288,9 +288,9 @@ class NodeExtractor(object):
           # it's a symbol
 
           # local symbol name (lagrangians!)
-          pos = get_sym_pos(sym)
-          to_node = edge.subs[pos]
-
+          to_node = edge.subs[nts_num]
+          nts_num += 1
+          
           # We are at (. N_id ) need to get to ( N_id .) 
 
           # First, Create a unique named version of this state (. N_id) and ( N_id . )
