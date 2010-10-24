@@ -198,7 +198,7 @@ class LMDecoderFST(object):
     self.first_weights = True
     self.round = 0
     self.beamCard = 200
-    self.beamRad  = 1.0
+    self.beamRad  = 0.3
     print "Done"
     # print "FSAing"
 
@@ -229,8 +229,8 @@ class LMDecoderFST(object):
     self.lagrangians = lagrangians
 
   def bad_approx(self):
-    self.beamCard += 10
-    self.beamRad += 0.05
+    self.beamCard += 200
+    self.beamRad += 0.2
     print "Bad Approx", self.beamCard, self.beamRad
 
   def full_create_weight_fst(self, updates):
@@ -439,7 +439,6 @@ class LMDecoderFST(object):
       print self.words[p], p, self.lagrangians["alpha"]["UNI"+str(p)]
     print "\n\n\n"
 
-    print rpath
     print "Actual value ", self.score_path(rpath) + total
       
     end_time_heu = time.time()
@@ -582,19 +581,19 @@ class LMDecoderFST(object):
       #fsa.print_fst(openfst.StdVectorFst(self.temp_fst))
       #if self.round % 10 <> 0:
 
-      distBestFinal = self.pruner.BeamPruneAndOrder(self.temp_fst,
-                                                beamed_fst, beam, beamCard, 
-                                                self.lagrange_symbol, self.lagrange_weight, path, distances,
-                                                reached, False)
-      print "Done"
-      #else:
-      #bestFinal = self.pruner.AStar(self.temp_fst,
-      #                              self.lagrange_symbol, self.lagrange_weight, path, distances,
-      #                              reached)
-#                                      openfst.IntVector(), openfst.FloatVector(), path)
-
-      endtime2 = time.time()
+      # distBestFinal = self.pruner.BeamPruneAndOrder(self.temp_fst,
+#                                                 beamed_fst, beam, beamCard, 
+#                                                 self.lagrange_symbol, self.lagrange_weight, path, distances,
+#                                                 reached, True)
       
+      #else:
+      bestFinal = self.pruner.AStar(self.temp_fst,
+                                    self.lagrange_symbol, self.lagrange_weight, path, distances,
+                                    reached)
+#                                      openfst.IntVector(), openfst.FloatVector(), path)
+      distBestFinal = distances[bestFinal]
+      endtime2 = time.time()
+      print "Done", distBestFinal
       print "BEAMING", endtime2 - starttime2
             
       print "DONE"
@@ -649,8 +648,8 @@ class LMDecoderFST(object):
     inter_fsa = openfst.StdVectorFst()
     short = openfst.StdVectorFst()
     chain_fsa = fsa.make_chain_fsa(path, self.original_fst.InputSymbols())
-    print "CHAIN"
-    fsa.print_fst(chain_fsa)
+    #print "CHAIN"
+    #fsa.print_fst(chain_fsa)
     path = openfst.IntVector()
     distances = openfst.FloatVector()
     reached = openfst.IntVector()
@@ -664,7 +663,7 @@ class LMDecoderFST(object):
     ##                              self.lagrange_symbol, self.lagrange_weight, path, distances,
     #                              reached)
     assert short.NumStates() <> 0
-    print "checking weight"
+    
     lm2 = fsa.get_weight(short)
     return lm2
   

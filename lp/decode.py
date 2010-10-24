@@ -23,7 +23,6 @@ import gc, cPickle, time
 FLAGS = flags.FLAGS
 
 INF = 1e90
-
 UP = 1
 DOWN = 0
 
@@ -788,10 +787,10 @@ class SimpleDual(object):
 
     if self.old_dual[-1] > self.old_primal[-1] + 0.001 : # self.lowest_primal + 0.001:
       # bad news, need more exact solution
-      pass
-      #self.s1.bad_approx()
-      #self.s2.bad_approx()
-      #return True
+      
+      self.s1.bad_approx()
+      self.s2.bad_approx()
+      return True
 
     if change == 0.0 and \
        self.old_primal[-1] > (self.lowest_primal + 1e-5):
@@ -1021,7 +1020,7 @@ if __name__ == "__main__":
       if FLAGS.dual_fst2:
         print "Forest ", i
         forest.number_nodes()
-        if len(forest) > 15: continue
+        if len(forest) > 25: continue
         #for node in forest :
         #  for edge in node.edges:
         #    print edge.position_id
@@ -1215,7 +1214,7 @@ if __name__ == "__main__":
         print "Set Heuristic"
 
         uni_ex = tree_extractor.NodeExtractor(False, s_table, 0.0)
-        uni_ex.set_uni_model(lm, original_weights["lm"])
+        #uni_ex.set_uni_model(lm, original_weights["lm"])
         uni_fsa = uni_ex.extract(forest)
 
 
