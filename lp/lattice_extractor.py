@@ -14,6 +14,9 @@ class Graph(object):
     assert node not in self.nodes
     self.nodes.append(node)
     self.id += 1 
+    return self.id - 1
+  
+  def size(self):
     return self.id
   
   def __iter__(self):
@@ -21,14 +24,20 @@ class Graph(object):
       yield n
 
 class LatNode(object):
+
   def __init__(self, graph):
     self.edges = []
+    self.back_edges = []
     self.id = graph.register_node(self)
+    self.lex = None
     
   def add_edge(self, to_node):
     self.edges.append(to_node)
+    to_node.back_edges.append(self)
 
-    
+  def label(self):
+    return str(self)
+
 class NonTermNode(LatNode):
   def __init__(self, graph, forest_node, dir):
     LatNode.__init__(self, graph)
@@ -44,6 +53,7 @@ class LexNode(LatNode):
   def __init__(self, graph, lex):
     LatNode.__init__(self, graph)
     self.lex = lex
+
   def __str__(self):
     return "%s %s"%(strip_lex(self.lex), self.id)
 
@@ -65,9 +75,16 @@ class InternalNode(LatNode):
 
   def __str__(self):
     rhs = self.rule.rhs[:]
+
+    
     rhs.insert(self.pos, ".")
     rhsstr = " ".join(rhs)
-    return "%s %s %s"%(rhsstr, self.dir, self.id)
+    
+    return ("%s %s %s"%(rhsstr, self.dir, self.id))
+
+  def label(self):
+    lhs = unicode(str(self.rule.lhs), errors='ignore')
+    return "%s %s"%(lhs, str(self))
 
   def color(self):
     return "green"
