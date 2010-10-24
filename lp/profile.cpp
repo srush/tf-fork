@@ -10,9 +10,10 @@ int main(int argc, char ** argv) {
 
   File file(argv[1] , "r", 0);
   lm.read(file);
-  VocabIndex context [] = {2,3};
+  VocabIndex word = all.getIndex("the");
+  VocabIndex context [] = {all.getIndex("street"),all.getIndex("hello")};
   for (int i =0; i < 200 * 200 * 200; i++) {
     
-    lm.wordProb(1, context); 
+    lm.wordProb(word, context); 
   }
 }
