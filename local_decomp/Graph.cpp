@@ -22,7 +22,7 @@ class Graph {
   }
 
 
-  void read_graph(char * f_name) {
+  void read_graph(const char * f_name) {
     ifstream fin(f_name ,ios::in);
     int tree_pos = 0;
     int node_type;
@@ -45,4 +45,4 @@ class Graph {
     }
     fin.close();
   }
-}
+};
