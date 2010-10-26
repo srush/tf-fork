@@ -2,6 +2,8 @@
 #include <Vocab.h>
 #include <Prob.h>
 
+#include "WordHolder.h"
+
 class LMCache {
 
   Vocab all;
@@ -11,10 +13,10 @@ class LMCache {
   float all_score[NUMWORDS][NUMWORDS][NUMWORDS];
 
   LMCache(const char * lm_file ) {
-    lm = new LM(all, 3);
+    lm = new Ngram(all, 3);
     
     File file(lm_file, "r", 0);
-    lm.read(file);
+    lm->read(file);
   
   }
   
@@ -26,14 +28,13 @@ class LMCache {
 
         for (int k = 0; k < words.num_words; k++) {
           if (k ==0) {
-            all_score[i][j][k] = lm.wordProb(words.word_map[k], context); 
+            all_score[i][j][k] = lm->wordProb(words.word_map[k], context); 
           } else {
-            all_score[i][j][k] = lm.wordProbRecompute(words.word_map[k], context); 
+            all_score[i][j][k] = lm->wordProbRecompute(words.word_map[k], context); 
           }
         }
       }
     }
   }
-  
 
-}
+};

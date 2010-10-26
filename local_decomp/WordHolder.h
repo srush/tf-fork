@@ -1,4 +1,4 @@
-
+#define NUMWORDS 300
 
 class WordHolder {
  public:     
@@ -9,4 +9,4 @@ class WordHolder {
 
   WordHolder(const char * f_name);
 
-}
+};

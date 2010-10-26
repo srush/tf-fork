@@ -5,14 +5,14 @@ from util import *
 class Graph(object):
   
   def __init__(self):
-    self.nodes = []
+    self.nodes = {}
     self.first = None
     self.id = 0
 
     self.check = set()
   def register_node(self, node):
     assert node not in self.nodes
-    self.nodes.append(node)
+    self.nodes[self.id] = node
     self.id += 1 
     return self.id - 1
   
@@ -20,20 +20,36 @@ class Graph(object):
     return self.id
   
   def __iter__(self):
-    for n in self.nodes:
-      yield n
+    for i in self.nodes:
+      yield self.nodes[i]
 
+  def filter(self, fn):
+    todel = []
+    for node in self:
+      if fn(node):
+        
+        for bn in node.back_edges:
+          bn.edges.remove(node)
+        for n2 in node.edges:
+          n2.back_edges.remove(node)
+          
+        for n2 in node.edges:
+          for bn in node.back_edges:
+            bn.add_edge(n2)
+        todel.append(node.id)
+    for i in todel:
+      del self.nodes[i]
+            
 class LatNode(object):
-
   def __init__(self, graph):
-    self.edges = []
-    self.back_edges = []
+    self.edges = set()
+    self.back_edges = set()
     self.id = graph.register_node(self)
     self.lex = None
     
   def add_edge(self, to_node):
-    self.edges.append(to_node)
-    to_node.back_edges.append(self)
+    self.edges.add(to_node)
+    to_node.back_edges.add(self)
 
   def label(self):
     return str(self)
