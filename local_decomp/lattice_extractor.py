@@ -8,6 +8,7 @@ class Graph(object):
     self.nodes = {}
     self.first = None
     self.id = 0
+    self.edge_map = {}
 
     self.check = set()
   def register_node(self, node):
@@ -15,7 +16,11 @@ class Graph(object):
     self.nodes[self.id] = node
     self.id += 1 
     return self.id - 1
-  
+
+  def register_edge_map(self, node, edge_id):
+    self.edge_map.setdefault(edge_id, set())
+    self.edge_map[edge_id].add(node)
+
   def size(self):
     return self.id
   
@@ -46,6 +51,7 @@ class LatNode(object):
     self.back_edges = set()
     self.id = graph.register_node(self)
     self.lex = None
+    self.graph = graph
     
   def add_edge(self, to_node):
     self.edges.add(to_node)
@@ -59,6 +65,7 @@ class NonTermNode(LatNode):
     LatNode.__init__(self, graph)
     self.forest_node = forest_node
     self.dir = dir
+
   def __str__(self):
     return "%s %s %s"%(self.forest_node, self.dir, self.id)
 
@@ -66,9 +73,10 @@ class NonTermNode(LatNode):
     return "red"
 
 class LexNode(LatNode):
-  def __init__(self, graph, lex):
+  def __init__(self, graph, lex, edge_id):
     LatNode.__init__(self, graph)
     self.lex = lex
+    self.graph.register_edge_map(self, edge_id)
 
   def __str__(self):
     return "%s %s"%(strip_lex(self.lex), self.id)
@@ -78,7 +86,7 @@ class LexNode(LatNode):
     
 
 class InternalNode(LatNode):
-  def __init__(self, graph, rule, pos, name, dir):
+  def __init__(self, graph, rule, pos, name, dir, edge_id):
     LatNode.__init__(self, graph)
     self.name = name
     self.rule = rule
@@ -88,6 +96,8 @@ class InternalNode(LatNode):
       self.pos = pos +1
     else :
       self.pos = pos
+
+    self.graph.register_edge_map(self, edge_id)
 
   def __str__(self):
     rhs = self.rule.rhs[:]
@@ -117,8 +127,12 @@ class NodeExtractor(object):
   def extract(self, forest):
     self.memo = {}
     self.graph = Graph()
-    (first, _) = self.extract_fsa(forest.root)
-    self.graph.first = first
+    first_state = LexNode(self.graph, "<s>", -1)
+    (first, last) = self.extract_fsa(forest.root)
+    last_state = LexNode(self.graph, "</s>", -1)
+    last.add_edge(last_state)
+    first_state.add_edge(first)
+    self.graph.first = first_state
     return self.graph
 
   def extract_fsa(self, node):
@@ -146,7 +160,7 @@ class NodeExtractor(object):
 
         # next is a word ( . lex ) 
         if is_lex(sym):
-          new_state = LexNode(self.graph, sym)
+          new_state = LexNode(self.graph, sym, edge.position_id)
 
           previous_state.add_edge(new_state)
 
@@ -165,8 +179,8 @@ class NodeExtractor(object):
 
           # First, Create a unique named version of this state (. N_id) and ( N_id . )
           # We need these so that we can assign lagrangians
-          local_down_state = InternalNode(self.graph, edge.rule, i, to_node, DOWN)
-          local_up_state = InternalNode(self.graph, edge.rule, i , to_node, UP)
+          local_down_state = InternalNode(self.graph, edge.rule, i, to_node, DOWN, edge.position_id)
+          local_up_state = InternalNode(self.graph, edge.rule, i , to_node, UP, edge.position_id)
 
           down_sym, up_sym = self.extract_fsa(to_node)
           

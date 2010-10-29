@@ -1,3 +1,7 @@
+#ifndef GRAPH_H_
+#define GRAPH_H_
+
+
 #define NUMSTATES 2000
 
 class Graph {
@@ -12,4 +16,9 @@ class Graph {
   int final[NUMSTATES];
 
   Graph(const char * f_name );
+ private:
+  void read_graph(const char * f_name);
 };
+
+
+#endif
